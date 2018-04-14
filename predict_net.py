@@ -28,11 +28,15 @@ ckpt_dir = './ckpt/'
 with tf.Session() as sess:
     ckpt = tf.train.get_checkpoint_state(ckpt_dir)
     saver.restore(sess, ckpt.model_checkpoint_path)
-    boxes_, scores_, classes_ = sess.run([boxes, scores, classes],
-                                         feed_dict={
-                                                    img_hw: [image_test.size[1], image_test.size[0]],
-                                                    imgs_holder: np.reshape(image_data / 255, [1, 416, 416, 3])})
+    import datetime
 
+    for i in range(100):
+        tt=datetime.datetime.now()
+        boxes_, scores_, classes_ = sess.run([boxes, scores, classes],
+                                             feed_dict={
+                                                        img_hw: [image_test.size[1], image_test.size[0]],
+                                                        imgs_holder: np.reshape(image_data / 255, [1, 416, 416, 3])})
+        print("time;",(datetime.datetime.now()-tt).microseconds)
     image_draw = draw_boxes(np.array(image_test, dtype=np.float32) / 255, boxes_, classes_, cfg.names, scores=scores_)
     fig = plt.figure(frameon=False)
     ax = plt.Axes(fig, [0, 0, 1, 1])

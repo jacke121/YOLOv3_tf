@@ -26,7 +26,7 @@ saver = tf.train.Saver()
 ckpt_dir = './ckpt/'
 
 gs = 0
-batch_per_epoch = 2000
+batch_per_epoch = 10000
 cfg.train.max_batches = int(batch_per_epoch * 10)
 cfg.train.image_resized = 608
 with tf.Session() as sess:

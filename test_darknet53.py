@@ -16,7 +16,7 @@ print(bias)
 #
 # print(len(tf.trainable_variables()))
 # print(model.conv3)
-img = cv2.imread('bladerrunner.jpg')
+img = cv2.imread('image/bladerrunner.jpg')
 img = cv2.resize(img, (416, 416), interpolation=cv2.INTER_AREA)
 img = np.expand_dims(img, axis=0)
 # print(img.shape)

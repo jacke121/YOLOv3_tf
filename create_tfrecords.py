@@ -5,12 +5,14 @@ import tensorflow as tf
 from PIL import Image
 
 
-sets = [('2007', 'trainval'), ('2012', 'trainval')]
+sets = [('2007', 'trainval')]
 
 
 classes = ["aeroplane", "bicycle", "bird", "boat", "bottle", "bus", "car", "cat", "chair", "cow", "diningtable",
            "dog", "horse", "motorbike", "person", "pottedplant", "sheep", "sofa", "train", "tvmonitor"]
 
+
+basepath=r"C:\data\pascal_voc"
 
 def convert(size, box):
     dw = 1./size[0]
@@ -27,7 +29,7 @@ def convert(size, box):
 
 
 def convert_annotation(year, image_id):
-    in_file = open('/home/raytroop/Dataset4ML/VOC%s/VOCdevkit/VOC%s/Annotations/%s.xml'%(year, year, image_id))
+    in_file = open(basepath+'/VOCdevkit/VOC%s/Annotations/%s.xml'%(year, image_id))
 
     tree = ET.parse(in_file)
     root = tree.getroot()
@@ -53,7 +55,7 @@ def convert_annotation(year, image_id):
     return np.array(bboxes, dtype=np.float32).flatten().tolist()
 
 def convert_img(year, image_id):
-    image = Image.open('/home/raytroop/Dataset4ML/VOC%s/VOCdevkit/VOC%s/JPEGImages/%s.jpg' % (year, year, image_id))
+    image = Image.open(basepath+'/VOCdevkit/VOC%s/JPEGImages/%s.jpg' % (year, image_id))
     resized_image = image.resize((416, 416), Image.BICUBIC)
     image_data = np.array(resized_image, dtype='float32')/255
     img_raw = image_data.tobytes()
@@ -62,8 +64,7 @@ def convert_img(year, image_id):
 filename = os.path.join('trainval'+'0712'+'.tfrecords')
 writer = tf.python_io.TFRecordWriter(filename)
 for year, image_set in sets:
-    image_ids = open('/home/raytroop/Dataset4ML/VOC%s/VOCdevkit/VOC%s/ImageSets/Main/%s.txt' % (
-        year, year, image_set)).read().strip().split()
+    image_ids = open(basepath+'/VOCdevkit/VOC%s/ImageSets/Main/%s.txt' % (year, image_set)).read().strip().split()
     # print(filename)
     for image_id in image_ids:
         xywhc = convert_annotation(year, image_id)

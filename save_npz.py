@@ -4,7 +4,7 @@ import numpy as np
 from collections import defaultdict
 from collections import namedtuple
 
-weights_path = "darknet53.conv.74"
+weights_path = r"E:\github\darknet_windows\build\darknet\x64\darknet53.conv.74"
 config_path = "yolov3-voc.cfg"
 conv_bn = namedtuple('conv_bn', ['bias', 'gamma', 'mean', 'variance', 'conv_weights'])
 weights_dict = {}
