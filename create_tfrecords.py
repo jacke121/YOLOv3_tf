@@ -11,9 +11,10 @@ sets = [('2007', 'trainval')]
 classes = ["aeroplane", "bicycle", "bird", "boat", "bottle", "bus", "car", "cat", "chair", "cow", "diningtable",
            "dog", "horse", "motorbike", "person", "pottedplant", "sheep", "sofa", "train", "tvmonitor"]
 
-
+classes = ["mouse"]
 basepath=r"C:\data\pascal_voc"
-
+basepath=r"E:\github\darknet_windows\build\darknet\x64\data\voc"
+filename = 'trainval0712.tfrecords'
 def convert(size, box):
     dw = 1./size[0]
     dh = 1./size[1]
@@ -61,7 +62,7 @@ def convert_img(year, image_id):
     img_raw = image_data.tobytes()
     return img_raw
 
-filename = os.path.join('trainval'+'0712'+'.tfrecords')
+
 writer = tf.python_io.TFRecordWriter(filename)
 for year, image_set in sets:
     image_ids = open(basepath+'/VOCdevkit/VOC%s/ImageSets/Main/%s.txt' % (year, image_set)).read().strip().split()

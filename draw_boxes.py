@@ -77,11 +77,8 @@ def draw_boxes(image, boxes, box_classes, class_names, scores=None):
 
         # My kingdom for a good redistributable image drawing library.
         for i in range(thickness):
-            draw.rectangle(
-                [left + i, top + i, right - i, bottom - i], outline=colors[c])
-        draw.rectangle(
-            [tuple(text_origin), tuple(text_origin + label_size)],
-            fill=colors[c])
+            draw.rectangle([left + i, top + i, right - i, bottom - i], outline=colors[c])
+        draw.rectangle([tuple(text_origin), tuple(text_origin + label_size)],fill=colors[c])
         draw.text(text_origin, label, fill=(0, 0, 0), font=font)
         del draw
 

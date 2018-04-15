@@ -4,3 +4,5 @@ darknet53.conv.74
 darknet53.conv.74.npz
 *.out
 *.tfrecords
+ckpt/
+ckpt_voc/

@@ -1,3 +1,5 @@
+import cv2
+
 from yolo_top import yolov3
 import numpy as np
 import tensorflow as tf
@@ -9,9 +11,7 @@ import matplotlib.pyplot as plt
 
 # IMG_ID ='008957'
 # image_test = Image.open('/home/raytroop/Dataset4ML/VOC2007/VOCdevkit/VOC2007/JPEGImages/{}.jpg'.format(IMG_ID))
-image_test = Image.open('image/dog.jpg')
-resized_image = image_test.resize((416, 416), Image.BICUBIC)
-image_data = np.array(resized_image, dtype='float32')
+
 
 imgs_holder = tf.placeholder(tf.float32, shape=[1, 416, 416, 3])
 istraining = tf.constant(False, tf.bool)
@@ -27,17 +27,35 @@ ckpt_dir = './ckpt/'
 
 with tf.Session() as sess:
     ckpt = tf.train.get_checkpoint_state(ckpt_dir)
+    print(ckpt.model_checkpoint_path)
     saver.restore(sess, ckpt.model_checkpoint_path)
     import datetime
+    import os
+    path = r"E:\github\darknet_windows\build\darknet\x64\data\voc\VOCdevkit\VOC2007\JPEGImages"
+    files = os.listdir(path)
+    # files.sort(key=lambda x: int(x[:-4]))
+    cv2.namedWindow("test", 0);
+    cv2.resizeWindow("test", 800, 600);
+    for filename in files:
+        if filename.endswith(".jpg") or filename.endswith(".png") or filename.endswith(".bmp"):
+            image_name = os.path.join(path , filename)
 
-    for i in range(100):
-        tt=datetime.datetime.now()
-        boxes_, scores_, classes_ = sess.run([boxes, scores, classes],
-                                             feed_dict={
-                                                        img_hw: [image_test.size[1], image_test.size[0]],
-                                                        imgs_holder: np.reshape(image_data / 255, [1, 416, 416, 3])})
-        print("time;",(datetime.datetime.now()-tt).microseconds)
-    image_draw = draw_boxes(np.array(image_test, dtype=np.float32) / 255, boxes_, classes_, cfg.names, scores=scores_)
+            image_test = Image.open(image_name)
+            resized_image = image_test.resize((416, 416), Image.BICUBIC)
+            image_data = np.array(resized_image, dtype='float32')
+
+            tt=datetime.datetime.now()
+            boxes_, scores_, classes_ = sess.run([boxes, scores, classes],
+                                                 feed_dict={
+                                                            img_hw: [image_test.size[1], image_test.size[0]],
+                                                            imgs_holder: np.reshape(image_data / 255, [1, 416, 416, 3])})
+            print("time;",(datetime.datetime.now()-tt).microseconds)
+            image_draw = draw_boxes(np.array(image_test, dtype=np.float32) / 255, boxes_, classes_, cfg.names,
+                                    scores=scores_)
+
+            cv2.imshow("test",image_draw)
+            cv2.waitKey()
+
     fig = plt.figure(frameon=False)
     ax = plt.Axes(fig, [0, 0, 1, 1])
     ax.set_axis_off()
